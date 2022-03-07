@@ -1,0 +1,67 @@
+.container{
+    display: flex;
+
+}
+
+.fancyNumber{
+    background: var(--dark-grey);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    font-size: 11px;
+    padding: 1px 0;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.chapters{
+    display: block;
+    border-right: 1px solid;
+    border-right-color: var(--light-grey);
+
+    flex-basis: 20%;
+    text-align: left;
+}
+
+.chaptersList{
+    margin-top: 25px;
+    display: block;
+}
+
+.chaptersList > div{
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+
+.transcript{
+    display: flex;
+    border-right: 1px solid;
+    border-right-color: var(--light-grey);
+    flex-basis: 50%;
+}
+
+.transcriptContent{
+    background: var(--white);
+    padding: 10px 20px;
+}
+
+.transcriptContent>p{
+    padding: 8px;
+    text-align: left;
+    border-left: 2px solid var(--light-grey);
+    margin-bottom: 30px;
+}
+
+.video{
+    display: flex;
+    border-right: 1px solid;
+    border-right-color: var(--light-grey);
+    flex-basis: 30%;
+    padding: 10px;
+}

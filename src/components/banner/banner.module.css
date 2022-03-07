@@ -1,0 +1,12 @@
+.banner{
+    background: var(--pink);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.banner p{
+    color: #fff;
+    text-align: center;
+    font-size: 0.7rem;
+    padding: 9px;
+}

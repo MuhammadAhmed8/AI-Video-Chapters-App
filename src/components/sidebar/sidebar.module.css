@@ -1,0 +1,45 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: var(--white);
+    height: 100%;
+}
+
+.list{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.listItem{
+    margin-bottom: 32px;
+    padding-left: 25px;
+}
+
+.listItem span{
+    font-size: 14px;
+    color: var(--dark-grey)
+}
+
+.listItemContent{
+    display: flex;
+    align-items: center;
+}
+
+.hr{
+    width: 90%;
+    margin:16px !important;
+    border-top:none;
+    border-color: var(--light-grey)
+}
+
+.mt20{
+    margin-top: 20px;
+}
+
+.wave{
+    margin-top: 50px;
+}

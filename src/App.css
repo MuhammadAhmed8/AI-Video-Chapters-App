@@ -1,5 +1,20 @@
+#root{
+  height: 100%;
+}
+
 .App {
   text-align: center;
+  height: 100%;
+}
+
+
+
+.main-container{
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  height: calc(100% - 106px);
+  
 }
 
 .App-logo {
