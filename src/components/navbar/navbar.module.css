@@ -4,8 +4,8 @@
     padding: 15px 30px;
     justify-content: start;
     align-items: center;
-    border-bottom: 1px solid var(--pink);
-    background: var(--white);
+    /* border-bottom: 1px solid var(--pink);
+    background: var(--white); */
 }
 
 .navItem{
