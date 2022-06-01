@@ -29,9 +29,9 @@ function App(props) {
 
       <Router>
           <div className="App">
-          {/* <Banner>
+          <Banner>
             You have 2hr of processing time left. <a href="#" style={{color:'#fff'}}>Switch to premium plan.</a>
-          </Banner> */}
+          </Banner>
           
           <Navbar/>
           

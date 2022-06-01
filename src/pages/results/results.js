@@ -1,4 +1,5 @@
 import React from 'react';
+import VideoPlayer from '../../components/videoPlayer/videoPlayer';
 import styles from './results.module.css';
 
 export default function Results(props){
@@ -43,12 +44,13 @@ export default function Results(props){
                 </div>
 
                 {/* video */}
-                <div className={styles.video}>
-                    <video width="400" height="240" controls>
+                <div >
+                    {/* <video width="400" height="240" controls>
                         <source src="movie.mp4" type="video/mp4"/>
                         <source src="movie.ogg" type="video/ogg"/>
                         Your browser does not support the video tag.
-                    </video>
+                    </video> */}
+                    <VideoPlayer></VideoPlayer>
                 </div>
 
             </div>
