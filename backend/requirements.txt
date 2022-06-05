@@ -3,6 +3,7 @@ click
 Flask
 Flask-RESTful
 Flask-SQLAlchemy
+Flask-Cors
 itsdangerous
 Jinja2
 MarkupSafe

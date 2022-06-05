@@ -1,5 +1,7 @@
 .container{
     display: flex;
+    gap: 1.5rem;
+    margin: 20px 0px;
 
 }
 
@@ -33,26 +35,30 @@
 
 .chaptersList > div{
     margin-bottom: 15px;
-    display: flex;
+    display: block;
     justify-content: start;
     align-items: center;
 }
 
+.title{
+    text-align: left;
+}
 
 .transcript{
-    display: flex;
+    display: block;
     border-right: 1px solid;
     border-right-color: var(--light-grey);
-    flex-basis: 50%;
+    flex-basis: 60%;
+    margin-right: 15px;
 }
 
 .transcriptContent{
     background: var(--white);
-    padding: 10px 20px;
+    padding: 14px 0px;
 }
 
 .transcriptContent>p{
-    padding: 8px;
+    padding: 8px 0px;
     text-align: left;
     border-left: 2px solid var(--light-grey);
     margin-bottom: 30px;
@@ -62,6 +68,6 @@
     display: flex;
     border-right: 1px solid;
     border-right-color: var(--light-grey);
-    flex-basis: 30%;
+    flex-basis: 20%;
     padding: 10px;
 }
