@@ -24,6 +24,7 @@ export default function Media(props) {
     const [fileGuid, setFileGuid] = useState("")
     const [fileSize, setFileSize] = useState(0)
     const [chunkCount, setChunkCount] = useState(0)
+    const [fileName, setFileName] = useState("")
 
     const progressInstance = <ProgressBar animated now={progress} label={`${progress.toFixed(3)}%`} />;
 
@@ -37,6 +38,9 @@ export default function Media(props) {
     const getFileContext = (e) => {
         resetChunkProperties();
         const _file = e.target.files[0];
+        
+        setFileName(_file.name)
+
         setFileSize(_file.size)
         const _totalCount = _file.size % chunkSize == 0 ? _file.size / chunkSize : Math.floor(_file.size / chunkSize) + 1; // Total count of chunks will have been upload to finish the file
         setChunkCount(_totalCount)
@@ -44,6 +48,7 @@ export default function Media(props) {
         setFileToBeUpload(_file)
         const _fileID = uuidv4() + "." + _file.name.split('.').pop();
         setFileGuid(_fileID)
+        e.target.value = ''
     }
 
 
@@ -94,10 +99,10 @@ export default function Media(props) {
     const uploadCompleted = async () => {
         var formData = new FormData();
         formData.append('fileName', fileGuid);
-        console.log(formData)
         const response = await axios.post(IP+ "api/uploadComplete", {}, {
             params: {
-                fileName: fileGuid,
+                fileName: fileName,
+                fileGuid: fileGuid
             },
             data: formData,
         });
@@ -119,6 +124,7 @@ export default function Media(props) {
     const onMediaClick = () => {
         // `current` points to the mounted file input element
         addMedia.current.click();
+        console.log("hello")
     };
 
     return (
