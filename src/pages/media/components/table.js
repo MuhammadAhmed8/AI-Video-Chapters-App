@@ -77,7 +77,7 @@ export default function MediaTable(props){
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {props.data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (

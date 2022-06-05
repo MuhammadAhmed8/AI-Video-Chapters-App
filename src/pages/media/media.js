@@ -15,6 +15,7 @@ export default function Media(props) {
 
     const addMedia = useRef()
 
+    const [loading,setLoading] = useState(true)
     const [showProgress, setShowProgress] = useState(false)
     const [counter, setCounter] = useState(1)
     const [fileToBeUpload, setFileToBeUpload] = useState({})
@@ -25,6 +26,7 @@ export default function Media(props) {
     const [fileSize, setFileSize] = useState(0)
     const [chunkCount, setChunkCount] = useState(0)
     const [fileName, setFileName] = useState("")
+    const [videos,setVideos] = useState([])
 
     const progressInstance = <ProgressBar animated now={progress} label={`${progress.toFixed(3)}%`} />;
 
@@ -127,6 +129,42 @@ export default function Media(props) {
         console.log("hello")
     };
 
+    useEffect(()=>{
+
+        const fetchVideoList = async () => {
+            try{
+                const {data: response} = await axios.get(IP+ "api/videos");
+                
+                // sample data response format
+                // let response = [{
+                //     "id": "abehce11dveeez",
+                //     "name": "video 1",
+                //     "status":"processed",
+                //     "uploaded":"An hour ago",
+                //     "length": "30 min"
+                // },{
+                //     "id": "abehce11dveeez",
+                //     "name": "video 1",
+                //     "status":"processed",
+                //     "uploaded":"An hour ago",
+                //     "length": "30 min"
+                // }]
+
+                setVideos(response);
+            }
+            catch(err){
+                console.error(err.message)
+                setLoading(false)
+            }
+            finally{
+                setLoading(false)
+            }
+        }
+
+        fetchVideoList()
+        
+    },[])
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -145,7 +183,18 @@ export default function Media(props) {
                 </Button>
             </div>
             <div>
-                <Table></Table>
+                {
+                    loading && <div>Loading...</div>
+                }
+                {
+                    !loading && (
+                        <div>
+                            <Table data={videos}></Table>
+                        </div>
+                    )
+                }
+
+                
             </div>
         </div>
     )
