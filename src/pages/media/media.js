@@ -133,6 +133,7 @@ export default function Media(props) {
 
         const fetchVideoList = async () => {
             try{
+                //change here 
                 const {data: response} = await axios.get(IP+ "api/videos");
                 
                 // sample data response format
@@ -149,6 +150,7 @@ export default function Media(props) {
                 //     "uploaded":"An hour ago",
                 //     "length": "30 min"
                 // }]
+                
 
                 setVideos(response);
             }
@@ -161,7 +163,9 @@ export default function Media(props) {
             }
         }
 
-        fetchVideoList()
+        const intervalId = setInterval(fetchVideoList,2000)
+
+        return () => clearInterval(intervalId)
         
     },[])
 
