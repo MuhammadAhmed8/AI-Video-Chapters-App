@@ -19,13 +19,6 @@
     margin-right: 5px;
 }
 
-.timestamp{
-    color: #777;
-    font-size: 14px;
-    padding: 5px;
-    letter-spacing: 0.5px;
-}
-
 .chapters{
     display: block;
     border-right: 1px solid;
@@ -53,6 +46,7 @@
 
 .title{
     text-align: left;
+    margin-bottom: 20px;
 }
 
 .transcript{

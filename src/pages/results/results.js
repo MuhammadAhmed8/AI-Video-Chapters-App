@@ -1,5 +1,6 @@
 import React from "react";
 import VideoPlayer from "../../components/videoPlayer/videoPlayer";
+import ChapterItem from "./components/chapterItem/chapterItem";
 import styles from "./results.module.css";
 
 export default function Results(props) {
@@ -10,27 +11,8 @@ export default function Results(props) {
         <div className={styles.chapters}>
           <h3>Chapters</h3>
           <div className={styles.chaptersList}>
-            <div>
-              <span className={styles.fancyNumber}>1</span>
-              <span className={styles.timestamp}>00:00:00 - 02:04:10</span>
-              <div>
-                <p>Kim Kardashian's failed her baby bar exam</p>
-              </div>
-            </div>
-            <div>
-              <span className={styles.fancyNumber}>2</span>
-              <span className={styles.timestamp}>00:00:00 - 02:04:10</span>
-              <div>
-                <p>Kim Kardashian's failed her baby bar exam</p>
-              </div>
-            </div>
-            <div>
-              <span className={styles.fancyNumber}>3</span>
-              <span className={styles.timestamp}>00:00:00 - 02:04:10</span>
-              <div>
-                <p>Kim Kardashian's failed her baby bar exam</p>
-              </div>
-            </div>
+            <ChapterItem title="Kim Kardashian's failed her baby bar exam" start="00:00:00" end="00:00:08"/>
+            <ChapterItem title="Kim Kardashian's failed her baby bar exam" start="00:00:09" end="00:03:54"/>
           </div>
         </div>
 
