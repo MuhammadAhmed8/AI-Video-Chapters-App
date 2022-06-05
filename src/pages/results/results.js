@@ -90,7 +90,7 @@ export default function Results(props) {
         </div>
 
         {/* video */}
-        <div>
+        <div className={styles.video}>
           <VideoPlayer></VideoPlayer>
           
         </div>
