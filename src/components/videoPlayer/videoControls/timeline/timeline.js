@@ -4,19 +4,19 @@ import styles from './styles.css'
 export const Timeline = ({handleScrubbing,videoDuration,progressPosition}) => {
 
   const timelineContainer = useRef()
-  const previewImg = useRef()
+  // const previewImg = useRef()
   const [isScrubbing,setIsScrubbing] = useState(false)
 
   function handleTimelineUpdate(e) {
     const rect = timelineContainer.current.getBoundingClientRect()
     const percent = Math.min(Math.max(0, e.nativeEvent.x - rect.x), rect.width) / rect.width
-    const previewImgNumber = Math.max(
-      1,
-      Math.floor((percent * videoDuration) / 10)
-    )
-    const previewImgSrc = `previewImgs/preview${previewImgNumber}.jpg`
-    previewImg.current.src = previewImgSrc
-    timelineContainer.current.style.setProperty("--preview-position", percent)
+    // const previewImgNumber = Math.max(
+    //   1,
+    //   Math.floor((percent * videoDuration) / 10)
+    // )
+    // const previewImgSrc = `previewImgs/preview${previewImgNumber}.jpg`
+    // previewImg.current.src = previewImgSrc
+    // timelineContainer.current.style.setProperty("--preview-position", percent)
   
     if (isScrubbing) {
       e.preventDefault()
@@ -39,7 +39,7 @@ export const Timeline = ({handleScrubbing,videoDuration,progressPosition}) => {
       "--progress-position": progressPosition
     }}>
       <div className='timeline'>
-        <img ref={previewImg} className="preview-img" />
+        {/* <img ref={previewImg} className="preview-img" /> */}
         <div className="thumb-indicator"></div>
       </div>
     </div>

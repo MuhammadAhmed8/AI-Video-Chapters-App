@@ -1,9 +1,10 @@
 from flask_restful import Resource
 
-class FilesDetails(Resource):
+class VideosDetails(Resource):
 
     # get file details
     def get(self):
+        
         return {"response" : "hello get"} 
     
     def post(self):

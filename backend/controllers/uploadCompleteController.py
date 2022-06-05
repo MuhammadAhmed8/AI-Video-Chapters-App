@@ -1,3 +1,5 @@
+import json
+from time import time
 from flask_restful import Resource
 from flask import request
 import os
@@ -52,7 +54,7 @@ class UploadCompleteController(Resource):
         fileNameExt = request.args['fileName']
         fileName = fileNameExt.split(".")[0]
         dirPath = f'./chunks/{fileGuid}'
-        videoDirPath = f'./videos/{fileName}'
+        videoDirPath = f'./videos/{fileGuid}'
         for chunkName in os.listdir(dirPath):
             with open(os.path.join(dirPath, chunkName), 'rb') as chunkF:
                 if not path.isdir(videoDirPath):
@@ -85,16 +87,37 @@ class UploadCompleteController(Resource):
         #          "exams are on monday","so we end todays class"]
         # input = read_text("transcript_data.json")
 
-        print(sentences)
+        # print(sentences)
 
         # result will be an array of 0s and 1s. last sentence hamesha 1 hoga islye woh omitted ha.
-        result = run_segmentation(model,encoder, sentences)
+        result = run_segmentation(model,encoder, sentences).tolist()
+        result.append(1)
 
         
-        print(result)
+        # print(result)
 
         timestamps = get_timestamps(sentences=sentences,transcript=data)
-        print(timestamps)
+        # print(timestamps)
+        
+        segment = ''
+        segments = []
+        start = '00:00:00'
+        for i in range(len(result)):
+            if result[i] == 1:
+                segment = segment + sentences[i]
+                segments.append({'start':start,'segment':segment})
+                start = timestamps[i]['time']
+                segment = ''
+            else:
+                segment = segment + sentences[i]
+        
+        # print(segments)
+
+        everything = {'data':data,'sentences':sentences, 'result_array':result, 'timestamps':timestamps,'segments':segments}
+        json_object = json.dumps(everything, indent = 4)
+
+        with open(f'{videoDirPath}/result.json','w') as f:
+            f.write(json_object)
         # print(data)
 
         return {"isSuccess" : True}
