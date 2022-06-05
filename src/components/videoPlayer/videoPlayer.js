@@ -182,6 +182,7 @@ export default function VideoPlayer() {
                 toggleTheaterMode={toggleTheaterMode}
             />
             <video 
+            style={{width:"400px", borderRadius:"10px"}}
                 ref={videoRef}
                 onLoadedData={() => {
                     setTotalTime(formatDuration(videoRef.current.duration))

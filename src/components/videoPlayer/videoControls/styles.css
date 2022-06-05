@@ -1,5 +1,5 @@
 .video-controls-container {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
@@ -7,6 +7,7 @@
     z-index: 100;
     opacity: 0;
     transition: opacity 150ms ease-in-out;
+
 }
 
 .video-controls-container::before {
@@ -14,7 +15,7 @@
     position: absolute;
     bottom: 0;
     background: linear-gradient(to top, rgba(0, 0, 0, .75), transparent);
-    width: 100%;
+    /* width: 100%; */
     aspect-ratio: 6 / 1;
     z-index: -1;
     pointer-events: none;
@@ -31,6 +32,9 @@
     gap: .5rem;
     padding: .25rem;
     align-items: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #333;
 }
 
 .video-controls-container .controls button {
