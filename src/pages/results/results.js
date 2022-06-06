@@ -10,11 +10,12 @@ export default function Results(props) {
   const { videoId } = useParams();
   const [isPageLoading, setIspageLoading] = useState(true)
   const [videoDetails, setVideoDetails] = useState(null)
+  const [videoPercent, setVideoPercent] = useState(0)
 
   useEffect(async () => {
     console.log(videoId);
     const response = await axios.get(IP + "api/videoDetails", { params: { id: videoId } });
-    // console.log(response.data.result)
+    console.log(response.data.result)
     setVideoDetails(response.data.result)
   }, [])
 
@@ -24,7 +25,9 @@ export default function Results(props) {
     }
   }, [videoDetails])
 
-  const goToChapter = () => {
+  const goToChapter = (percent) => {
+    console.log(percent)
+    setVideoPercent(percent)
     console.log('hello')
   }
 
@@ -37,7 +40,7 @@ export default function Results(props) {
           <h3>Chapters</h3>
           <div className={styles.chaptersList}>
             {videoDetails.segments.map((segment)=>{
-              return (<ChapterItem title={segment.title} start={segment.start} end={segment.end} onClick={goToChapter} />)
+              return (<ChapterItem title={segment.title} start={segment.start} end={segment.end} onClick={()=>goToChapter(segment.percent)} />)
             })
             }
             {/* <ChapterItem title="Kim Kardashian's failed her baby bar exam" start="00:00:00" end="00:01:08" />
@@ -97,7 +100,7 @@ export default function Results(props) {
 
         {/* video */}
         <div className={styles.video}>
-          <VideoPlayer src={IP + "api/staticVideo/" + videoId} ></VideoPlayer>
+          <VideoPlayer src={IP + "api/staticVideo/" + videoId} initialPercent={videoPercent}></VideoPlayer>
 
         </div>
 

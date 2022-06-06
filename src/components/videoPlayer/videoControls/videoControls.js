@@ -25,7 +25,8 @@ export const VideoControls = ({
     changePlaybackSpeed,
     toggleMiniPlayerMode,
     toggleTheaterMode,
-    toggleFullScreenMode
+    toggleFullScreenMode,
+    playbackRate
 }) => {
     return (
         <div className="video-controls-container">
@@ -34,8 +35,8 @@ export const VideoControls = ({
                 <PlayPauseButton onClick={togglePlay} />
                 <VolumeSlider onVolumeChange={onVolumeChange} onMuteClick={toggleMute} initialVolume={initialVolume} />
                 <DurationContainer currentTime={currentTime} totalTime={totalTime} />
-                <CaptionsButton onClick={toggleCaptions} />
-                <SpeedButton onClick={changePlaybackSpeed} />
+                {/* <CaptionsButton onClick={toggleCaptions} /> */}
+                <SpeedButton onClick={changePlaybackSpeed} rate={playbackRate}/>
                 <MiniPlayerButton onClick={toggleMiniPlayerMode} />
                 <TheatreButton onClick={toggleTheaterMode} />
                 <FullScreenButton onClick={toggleFullScreenMode} />

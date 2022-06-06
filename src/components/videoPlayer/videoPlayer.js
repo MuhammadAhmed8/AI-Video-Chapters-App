@@ -4,7 +4,7 @@ import { VideoControls } from "./videoControls/videoControls";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { IP } from "../constansts";
 
-export default function VideoPlayer({src}) {
+export default function VideoPlayer({src,initialPercent}) {
   const speedBtn = document.querySelector(".speed-btn");
 
   const videoRef = useRef();
@@ -17,6 +17,7 @@ export default function VideoPlayer({src}) {
   const [currentTime, setCurrentTime] = useState("0:00");
   const [totalTime, setTotalTime] = useState();
   const [thumbnailImg, setThumbnailImg] = useState(`previewImgs/preview1.jpg`);
+  const [playbackRate, setPlaybackRate] = useState(1)
 
   useEffect(() => {
     if (videoRef.current) {
@@ -32,6 +33,14 @@ export default function VideoPlayer({src}) {
       });
     }
   }, [videoRef.current]);
+
+  useEffect(()=>{
+    console.log(videoRef.current.duration)
+    if (!isNaN(videoRef.current.duration) ){
+    videoRef.current.currentTime = initialPercent * videoRef.current.duration;
+      if (!wasPaused) videoRef.current.play();
+    }
+  },[initialPercent,videoRef.current])
 
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
@@ -97,7 +106,8 @@ export default function VideoPlayer({src}) {
     let newPlaybackRate = videoRef.current.playbackRate + 0.25;
     if (newPlaybackRate > 2) newPlaybackRate = 0.25;
     videoRef.current.playbackRate = newPlaybackRate;
-    speedBtn.textContent = `${newPlaybackRate}x`;
+    setPlaybackRate(newPlaybackRate)
+    // speedBtn.textContent = `${newPlaybackRate}x`;
   }
 
   function toggleCaptions() {
@@ -189,6 +199,8 @@ export default function VideoPlayer({src}) {
         toggleMiniPlayerMode={toggleMiniPlayerMode}
         toggleMute={toggleMute}
         toggleTheaterMode={toggleTheaterMode}
+        changePlaybackSpeed={changePlaybackSpeed}
+        playbackRate = {`${playbackRate}x`}
       />
       <video
         style={{borderRadius: "0" }}
