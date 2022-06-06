@@ -27,6 +27,7 @@ export default function Media(props) {
     const [chunkCount, setChunkCount] = useState(0)
     const [fileName, setFileName] = useState("")
     const [videos,setVideos] = useState([])
+    const [change,setChange] = useState('')
 
     const progressInstance = <ProgressBar animated now={progress} label={`${progress.toFixed(3)}%`} />;
 
@@ -51,6 +52,7 @@ export default function Media(props) {
         const _fileID = uuidv4() + "." + _file.name.split('.').pop();
         setFileGuid(_fileID)
         e.target.value = ''
+        
     }
 
 
@@ -66,6 +68,7 @@ export default function Media(props) {
         try {
             var formData = new FormData();
             formData.append('video', chunk);
+            console.log(counter)
             const response = await axios.post(IP+ "api/uploadChunks", formData, {
                 params: {
                     id: counter,
@@ -113,6 +116,7 @@ export default function Media(props) {
         if (data.isSuccess) {
             setProgress(100);
         }
+        setChange(fileGuid)
     }
 
     const resetChunkProperties = () => {
@@ -134,10 +138,10 @@ export default function Media(props) {
         const fetchVideoList = async () => {
             try{
                 //change here 
-                const {data: response} = await axios.get(IP+ "api/videos");
-                
+                const response = await axios.get(IP+ "api/videosDetails");
+                const data = response.data.result
                 // sample data response format
-                // let response = [{
+                // let data = [{
                 //     "id": "abehce11dveeez",
                 //     "name": "video 1",
                 //     "status":"processed",
@@ -146,13 +150,13 @@ export default function Media(props) {
                 // },{
                 //     "id": "abehce11dveeez",
                 //     "name": "video 1",
-                //     "status":"processed",
+                //     "status":"processing",
                 //     "uploaded":"An hour ago",
                 //     "length": "30 min"
                 // }]
                 
 
-                setVideos(response);
+                setVideos(data);
             }
             catch(err){
                 console.error(err.message)
@@ -162,6 +166,7 @@ export default function Media(props) {
                 setLoading(false)
             }
         }
+
 
         const intervalId = setInterval(fetchVideoList,2000)
 

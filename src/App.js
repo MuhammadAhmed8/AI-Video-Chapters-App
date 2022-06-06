@@ -40,7 +40,7 @@ function App(props) {
                 <Route index element={<Media/>}/>
               </Route>
               <Route path="/" element={<LayoutWithNarrowSidebar/>}>
-                <Route path="/results" element={<Results/>}/>
+                <Route path="/results/:videoId" element={<Results/>}/>
               </Route>
           </Routes>
           </div>

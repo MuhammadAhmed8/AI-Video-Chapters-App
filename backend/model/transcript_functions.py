@@ -49,26 +49,17 @@ def get_transcription_result_url(audio_url):
     while True:
         data = poll(transcript_id=transcript_id)
         if data['status'] == 'completed':
-            vtt = get_vtt_result(transcript_id=transcript_id)
-            return data , vtt , None
+            return data  , None
         elif data['status'] == 'error':
-            return data, vtt, data['error']
+            return data, data['error']
         print("Waiting for 30 seconds")
         time.sleep(30)
 
 
-def save_transcript(audio_url, save_folder):
-    data, vtt, error =  get_transcription_result_url(audio_url)
+def save_transcript(audio_url):
+    data,  error =  get_transcription_result_url(audio_url)
 
     if data:
-        with open(f'{save_folder}/transcript_data.json', 'w') as f:
-            # f.write(str(data))
-            json.dump(data, f)
-        
-        # with open(f'{save_folder}/transcript.txt',"w") as f:
-        #     f.write(vtt)
-
-        print("Transcription saved!!")
         return data
     elif error:
         print("Error!!", error)

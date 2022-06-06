@@ -1,14 +1,30 @@
 import json
+import threading
 from time import time
 from flask_restful import Resource
 from flask import request
 import os
 import shutil
 from os import path, makedirs
-import ffmpeg
 from model.model_functions import break_into_sentences, load_segmentation_model, load_sentence_encoder, run_segmentation
 from model.transcript_functions import upload_audio,save_transcript
-from model.model_functions import read_text
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+import wave
+import contextlib
+
+
+def generate_title(seg):
+  output_dir="./model/outputs" 
+
+  path = os.path.join(output_dir, "model_files")
+  model = AutoModelForSeq2SeqLM.from_pretrained(path)
+  tokenizer = AutoTokenizer.from_pretrained(path)
+  input_ids = tokenizer.encode("summarize: " + seg, return_tensors="pt", add_special_tokens=True)
+  generated_ids = model.generate(input_ids=input_ids,num_beams=5,max_length=50,repetition_penalty=2.5,length_penalty=1,early_stopping=True,num_return_sequences=3)
+  preds = [tokenizer.decode(g, skip_special_tokens=True, clean_up_tokenization_spaces=True) for g in generated_ids]
+  print("Title: ", preds[-1])
+  print(preds)
+  return preds[-1]
 
 def convert_to_timestamp(millis):
   millis = int(millis)
@@ -20,10 +36,66 @@ def convert_to_timestamp(millis):
 
   return hours,minutes,seconds
 
+def get_wav_length(path):
+    with contextlib.closing(wave.open(path,'r')) as f:
+        frames = f.getnframes()
+        rate = f.getframerate()
+        duration = frames / float(rate)
+        return duration
 
-# @params1: sentences - all sentences (list of sentences)
-# @params2: transcript (assemblyai ka output)
-# returns: list of start timetamps of every sentence
+
+def compute_result(**kwargs):
+  videoDirPath = kwargs.get('videoDirPath', '')
+  audioPath = kwargs.get('audioPath', '')
+
+  audio_url = upload_audio(audioPath)
+  data = save_transcript(audio_url=audio_url)
+
+  audio_length_ms = get_wav_length(audioPath) * 1000
+  
+  sentences = break_into_sentences(text=data['text'])
+
+
+  model_path = "./model/lstm-checkpoints-2checkpoint025.pt"
+
+  model = load_segmentation_model(model_path)
+  encoder = load_sentence_encoder()
+
+  result = run_segmentation(model,encoder, sentences).tolist()
+  result.append(1)
+
+  
+  # print(result)
+
+  timestamps = get_timestamps(sentences=sentences,transcript=data)
+  # print(timestamps)
+
+  
+  segment = ''
+  segments = []
+  start = '00:00:00'
+  percent = 0
+  for i in range(len(result)):
+      if result[i] == 1:
+          segment = segment + sentences[i]
+          title = generate_title(segment)
+          temp = start
+          start = timestamps[i]['time']
+          segments.append({'start':temp,'end':start,'segment':segment,'title':title,'percent':percent})
+          percent = timestamps[i]['start'] / audio_length_ms
+          segment = ''
+      else:
+          segment = segment + sentences[i]
+  
+  # print(segments)
+
+  everything = {'data':data,'sentences':sentences, 'result_array':result, 'timestamps':timestamps,'segments':segments}
+  json_object = json.dumps(everything, indent = 4)
+
+  with open(f'{videoDirPath}/result.json','w') as f:
+      f.write(json_object)
+  # print(data)
+  pass
 
 def get_timestamps(sentences, transcript):
   transcript_start = 0
@@ -41,12 +113,10 @@ def get_timestamps(sentences, transcript):
           'time': '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours,minutes,seconds)
       })
       
-      # print ("%d:%d:%d" % (hours, minutes, seconds))
       
     transcript_start += len(sentence_words)
   return timestamps
     
-# get_timestamps(["Father they're all talking about here.","Are you ready? Not yet","Okay, ready, godfather?","I'm ready.", "Are you ready?","I'm ready."],transcript)
 class UploadCompleteController(Resource):
   
     def post(self):
@@ -66,58 +136,16 @@ class UploadCompleteController(Resource):
 
         audioPath = f'{videoDirPath}/{fileName}.wav'
 
-        command2mp3 = f'ffmpeg -i {videoDirPath}/{fileNameExt} {videoDirPath}/{fileName}.mp3'
-        command2wav = f'ffmpeg -i {videoDirPath}/{fileName}.mp3 {audioPath}'
+        command2wav = f'ffmpeg -i {videoDirPath}/{fileNameExt}  {audioPath}'
 
-        os.system(command2mp3)
         os.system(command2wav)
 
-        audio_url = upload_audio(audioPath)
-        data = save_transcript(audio_url=audio_url,save_folder=videoDirPath)
-        
-        sentences = break_into_sentences(text=data['text'])
+        thread = threading.Thread(target=compute_result, kwargs={
+                    'videoDirPath': videoDirPath, 'audioPath': audioPath})
+        thread.start()
 
-
-        model_path = "./model/lstm-checkpoints-2checkpoint025.pt"
-
-        model = load_segmentation_model(model_path)
-        encoder = load_sentence_encoder()
-
-        # input = ["hello todays topic is machine learning", "we will discuss supervised learning","baby kiss me",
-        #          "exams are on monday","so we end todays class"]
-        # input = read_text("transcript_data.json")
-
-        # print(sentences)
-
-        # result will be an array of 0s and 1s. last sentence hamesha 1 hoga islye woh omitted ha.
-        result = run_segmentation(model,encoder, sentences).tolist()
-        result.append(1)
+        # compute_result(videoDirPath=videoDirPath,audioPath=audioPath)
 
         
-        # print(result)
-
-        timestamps = get_timestamps(sentences=sentences,transcript=data)
-        # print(timestamps)
-        
-        segment = ''
-        segments = []
-        start = '00:00:00'
-        for i in range(len(result)):
-            if result[i] == 1:
-                segment = segment + sentences[i]
-                segments.append({'start':start,'segment':segment})
-                start = timestamps[i]['time']
-                segment = ''
-            else:
-                segment = segment + sentences[i]
-        
-        # print(segments)
-
-        everything = {'data':data,'sentences':sentences, 'result_array':result, 'timestamps':timestamps,'segments':segments}
-        json_object = json.dumps(everything, indent = 4)
-
-        with open(f'{videoDirPath}/result.json','w') as f:
-            f.write(json_object)
-        # print(data)
 
         return {"isSuccess" : True}

@@ -1,9 +1,21 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { IP } from "../../components/constansts";
 import VideoPlayer from "../../components/videoPlayer/videoPlayer";
 import ChapterItem from "./components/chapterItem/chapterItem";
 import styles from "./results.module.css";
 
 export default function Results(props) {
+  const {videoId} = useParams();
+  const [isPageLoading,setIspageLoading] = useState(true)
+  const [videoDetails,setVideoDetails] = useState(null)
+
+  useEffect(async()=> {
+    console.log(videoId);
+    const response = await axios.get(IP+ "api/videoDetails",{ params: { id: videoId } });
+    console.log(response.data)
+  },[])
   return (
     <div>
       <div className={styles.container}>
@@ -61,7 +73,7 @@ export default function Results(props) {
 
         {/* video */}
         <div className={styles.video}>
-          <VideoPlayer></VideoPlayer>
+          <VideoPlayer src = {IP + "api/staticVideo/"+videoId} ></VideoPlayer>
           
         </div>
 

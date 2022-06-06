@@ -27,10 +27,11 @@ export const Timeline = ({handleScrubbing,videoDuration,progressPosition}) => {
   function toggleScrubbing(e) {
     const rect = timelineContainer.current.getBoundingClientRect()
     const percent = Math.min(Math.max(0, e.nativeEvent.x - rect.x), rect.width) / rect.width
+    console.log(percent)
     setIsScrubbing((prevIsScrubbing) => {
       let _isScrubbing = (e.nativeEvent.buttons & 1) === 1;
       handleTimelineUpdate(e)
-      handleScrubbing({_isScrubbing,percent})
+      handleScrubbing({_isScrubbing,percent}) //yeehhh chahiye hoga for on click title
       return _isScrubbing;
     })
   }

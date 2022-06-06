@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import "./styles.css";
 import { VideoControls } from "./videoControls/videoControls";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import { IP } from "../constansts";
 
-export default function VideoPlayer() {
+export default function VideoPlayer({src}) {
   const speedBtn = document.querySelector(".speed-btn");
 
   const videoRef = useRef();
@@ -222,7 +223,7 @@ export default function VideoPlayer() {
         onPause={() => {
           videoContainer.current.classList.add("paused");
         }}
-        src="kim_video.mp4"
+        src= {src}
       >
         <track kind="captions" srcLang="en" src="subtitles.vtt" />
       </video>
