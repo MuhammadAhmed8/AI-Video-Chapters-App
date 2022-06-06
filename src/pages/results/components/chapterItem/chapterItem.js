@@ -4,7 +4,7 @@ import styles from "./chapterItem.module.css";
 export default function ChapterItem(props){
 
     return (
-    <div>
+    <div onClick={props.onClick}>
         <span className={styles.fancyNumber}>1</span>
         <span className={styles.timestamp}>{props.start} - {props.end}</span>
         <div>
