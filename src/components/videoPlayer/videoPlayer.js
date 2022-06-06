@@ -82,7 +82,7 @@ export default function VideoPlayer() {
         1,
         Math.floor((percent * videoRef.current.duration) / 10)
       );
-      setThumbnailImg(`previewImgs/preview${previewImgNumber}.jpg`);
+      // setThumbnailImg(`previewImgs/preview${previewImgNumber}.jpg`);
     } else {
       videoRef.current.currentTime = percent * videoRef.current.duration;
       if (!wasPaused) videoRef.current.play();
@@ -190,7 +190,7 @@ export default function VideoPlayer() {
         toggleTheaterMode={toggleTheaterMode}
       />
       <video
-        style={{borderRadius: "10px" }}
+        style={{borderRadius: "0" }}
         ref={videoRef}
         onLoadedData={() => {
           setTotalTime(formatDuration(videoRef.current.duration));
@@ -222,7 +222,7 @@ export default function VideoPlayer() {
         onPause={() => {
           videoContainer.current.classList.add("paused");
         }}
-        src="Video.mp4"
+        src="kim_video.mp4"
       >
         <track kind="captions" srcLang="en" src="subtitles.vtt" />
       </video>
